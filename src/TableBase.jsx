@@ -1,36 +1,44 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
-import { alpha } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { useTheme } from '@mui/material/styles';
+import {
+  Box,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TablePagination,
+  TableSortLabel,
+  Checkbox,
+  IconButton,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogActions,
+  Button,
+  Tabs,
+  Tab,
+  TextField,
+  Menu,
+  MenuItem,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material';
+import ClearIcon from '@mui/icons-material/Clear';
+import InfoIcon from '@mui/icons-material/Info';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import { visuallyHidden } from '@mui/utils';
+import EditIcon from '@mui/icons-material/Edit';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import ViewColumnIcon from '@mui/icons-material/ViewColumn';
+import DragHandleIcon from '@mui/icons-material/DragHandle';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 
 function createData(id, name, calories, fat, carbs, protein) {
-  return {
-    id,
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
-  };
+  return { id, name, calories, fat, carbs, protein };
 }
 
 const rows = [
@@ -44,176 +52,64 @@ const rows = [
   createData(8, 'Jelly Bean', 375, 0.0, 94, 0.0),
   createData(9, 'KitKat', 518, 26.0, 65, 7.0),
   createData(10, 'Lollipop', 392, 0.2, 98, 0.0),
-  createData(11, 'Marshmallow', 318, 0, 81, 2.0),
-  createData(12, 'Nougat', 360, 19.0, 9, 37.0),
-  createData(13, 'Oreo', 437, 18.0, 63, 4.0),
 ];
 
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-const headCells = [
-  {
-    id: 'name',
-    numeric: false,
-    disablePadding: true,
-    label: 'Dessert (100g serving)',
-  },
-  {
-    id: 'calories',
-    numeric: true,
-    disablePadding: false,
-    label: 'Calories',
-  },
-  {
-    id: 'fat',
-    numeric: true,
-    disablePadding: false,
-    label: 'Fat (g)',
-  },
-  {
-    id: 'carbs',
-    numeric: true,
-    disablePadding: false,
-    label: 'Carbs (g)',
-  },
-  {
-    id: 'protein',
-    numeric: true,
-    disablePadding: false,
-    label: 'Protein (g)',
-  },
+const initialColumns = [
+  { id: 'name', label: 'Name', visible: true },
+  { id: 'calories', label: 'Calories', visible: true },
+  { id: 'fat', label: 'Fat (g)', visible: true },
+  { id: 'carbs', label: 'Carbs (g)', visible: true },
+  { id: 'protein', label: 'Protein (g)', visible: true },
 ];
 
-function EnhancedTableHead(props) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
-    props;
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
-  };
+export default function ThemedTable() {
+  const theme = useTheme();
 
-  return (
-    <TableHead>
-      <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all desserts',
-            }}
-          />
-        </TableCell>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'normal'}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  );
-}
-
-EnhancedTableHead.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-  onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-  orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
-};
-
-function EnhancedTableToolbar(props) {
-  const { numSelected } = props;
-  return (
-    <Toolbar
-      sx={[
-        {
-          pl: { sm: 2 },
-          pr: { xs: 1, sm: 1 },
-        },
-        numSelected > 0 && {
-          bgcolor: (theme) =>
-            alpha(theme.palette.primary.main, theme.palette.action.activatedOpacity),
-        },
-      ]}
-    >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          List
-        </Typography>
-      )}
-      
-    </Toolbar>
-  );
-}
-
-EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-};
-
-export default function EnhancedTable() {
-  const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('calories');
-  const [selected, setSelected] = React.useState([]);
+  const [rowsData, setRowsData] = React.useState(rows);
+  const [columns, setColumns] = React.useState(initialColumns); // Manage columns
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [selected, setSelected] = React.useState([]);
+  const [order, setOrder] = React.useState('asc');
+  const [orderBy, setOrderBy] = React.useState('name');
+  const [open, setOpen] = React.useState(false);
+  const [filterOpen, setFilterOpen] = React.useState(false);
+  const [columnDialogOpen, setColumnDialogOpen] = React.useState(false); // Column dialog
+  const [selectedRow, setSelectedRow] = React.useState(null);
+  const [tabValue, setTabValue] = React.useState(0);
+  const [menuAnchorEl, setMenuAnchorEl] = React.useState(null);
 
-  const handleRequestSort = (event, property) => {
+  const [filter, setFilter] = React.useState({
+    name: '',
+    calories: '',
+    fat: '',
+    carbs: '',
+    protein: '',
+  });
+
+  const [appliedFilter, setAppliedFilter] = React.useState({ ...filter });
+
+  const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
 
+  const handleChangePage = (event, newPage) => setPage(newPage);
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const handleRowDetailsClick = (row) => {
+    setSelectedRow(row);
+    setOpen(true);
+  };
+
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.id);
+      const newSelected = rowsData.map((row) => row.id);
       setSelected(newSelected);
       return;
     }
@@ -233,121 +129,326 @@ export default function EnhancedTable() {
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
+        selected.slice(selectedIndex + 1)
       );
     }
     setSelected(newSelected);
   };
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+  const handleFilterChange = (event) => {
+    setFilter((prev) => ({
+      ...prev,
+      [event.target.name]: event.target.value,
+    }));
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+  const applyFilter = () => {
+    setAppliedFilter(filter);
+    setFilterOpen(false);
   };
 
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
+  const clearFilter = () => {
+    setFilter({
+      name: '',
+      calories: '',
+      fat: '',
+      carbs: '',
+      protein: '',
+    });
+    setAppliedFilter({
+      name: '',
+      calories: '',
+      fat: '',
+      carbs: '',
+      protein: '',
+    });
   };
 
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+  const handleMenuOpen = (event) => {
+    setMenuAnchorEl(event.currentTarget);
+  };
 
-  const visibleRows = React.useMemo(
-    () =>
-      [...rows]
-        .sort(getComparator(order, orderBy))
-        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-    [order, orderBy, page, rowsPerPage],
-  );
+  const handleMenuClose = () => {
+    setMenuAnchorEl(null);
+  };
+
+  const handleDeleteSelected = () => {
+    setRowsData(rowsData.filter((row) => !selected.includes(row.id)));
+    setSelected([]);
+    handleMenuClose();
+  };
+
+  const handleExportSelected = () => {
+    const selectedRows = rowsData.filter((row) => selected.includes(row.id));
+    const csvContent =
+      'data:text/csv;charset=utf-8,' +
+      ['id,name,calories,fat,carbs,protein']
+        .concat(selectedRows.map((row) => Object.values(row).join(',')))
+        .join('\n');
+    const link = document.createElement('a');
+    link.href = encodeURI(csvContent);
+    link.download = 'selected_rows.csv';
+    link.click();
+    handleMenuClose();
+  };
+
+  const onDragEnd = (result) => {
+    if (!result.destination) return;
+    const reorderedColumns = Array.from(columns);
+    const [moved] = reorderedColumns.splice(result.source.index, 1);
+    reorderedColumns.splice(result.destination.index, 0, moved);
+    setColumns(reorderedColumns);
+  };
+
+  const visibleColumns = columns.filter((col) => col.visible);
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
-        <TableContainer>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
+    <Box>
+      {/* Toolbar */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+        <Box>
+          {Object.values(appliedFilter).some((val) => val) && (
+            <IconButton onClick={clearFilter}>
+              <ClearIcon />
+            </IconButton>
+          )}
+          <IconButton onClick={() => setFilterOpen(true)}>
+            <FilterListIcon />
+          </IconButton>
+          <IconButton onClick={() => setColumnDialogOpen(true)}>
+            <ViewColumnIcon />
+          </IconButton>
+          <Button
+            variant="outlined"
+            onClick={handleMenuOpen}
+            endIcon={<MoreVertIcon />}
+            sx={{ ml: 2 }}
           >
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-            />
-            <TableBody>
-              {visibleRows.map((row, index) => {
-                const isItemSelected = selected.includes(row.id);
-                const labelId = `enhanced-table-checkbox-${index}`;
-
-                return (
-                  <TableRow
-                    hover
-                    onClick={(event) => handleClick(event, row.id)}
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row.id}
-                    selected={isItemSelected}
-                    sx={{ cursor: 'pointer' }}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          'aria-labelledby': labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell
-                      component="th"
-                      id={labelId}
-                      scope="row"
-                      padding="none"
-                    >
-                      {row.name}
-                    </TableCell>
-                    <TableCell align="right">{row.calories}</TableCell>
-                    <TableCell align="right">{row.fat}</TableCell>
-                    <TableCell align="right">{row.carbs}</TableCell>
-                    <TableCell align="right">{row.protein}</TableCell>
-                  </TableRow>
-                );
-              })}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: (dense ? 33 : 53) * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
+            Bulk Action
+          </Button>
+          <Menu
+            anchorEl={menuAnchorEl}
+            open={Boolean(menuAnchorEl)}
+            onClose={handleMenuClose}
+          >
+            <MenuItem onClick={handleDeleteSelected}>Delete Selected</MenuItem>
+            <MenuItem onClick={handleExportSelected}>Export Selected</MenuItem>
+          </Menu>
+        </Box>
         <TablePagination
-          rowsPerPageOptions={[2 , 5, 10, 25 , 50 , 100 , 500 , 1000]}
+          rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={rowsData.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
+      </Box>
+
+      {/* Table */}
+      <Paper>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow sx={{ backgroundColor: theme.palette.action.hover }}>
+                <TableCell padding="checkbox">
+                  <Checkbox
+                    indeterminate={
+                      selected.length > 0 && selected.length < rowsData.length
+                    }
+                    checked={
+                      rowsData.length > 0 && selected.length === rowsData.length
+                    }
+                    onChange={handleSelectAllClick}
+                  />
+                </TableCell>
+                {visibleColumns.map((col) => (
+                  <TableCell key={col.id}>
+                    <TableSortLabel
+                      active={orderBy === col.id}
+                      direction={orderBy === col.id ? order : 'asc'}
+                      onClick={() => handleRequestSort(col.id)}
+                    >
+                      {col.label}
+                    </TableSortLabel>
+                  </TableCell>
+                ))}
+                <TableCell align="center">Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rowsData
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => {
+                  const isItemSelected = selected.includes(row.id);
+                  return (
+                    <TableRow
+                      key={row.id}
+                      sx={{
+                        backgroundColor:
+                          index % 2 === 0
+                            ? theme.palette.background.default
+                            : theme.palette.background.paper,
+                      }}
+                      role="checkbox"
+                      aria-checked={isItemSelected}
+                      selected={isItemSelected}
+                      onClick={(event) => handleClick(event, row.id)}
+                    >
+                      <TableCell padding="checkbox">
+                        <Checkbox checked={isItemSelected} />
+                      </TableCell>
+                      {visibleColumns.map((col) => (
+                        <TableCell key={col.id}>{row[col.id]}</TableCell>
+                      ))}
+                      <TableCell align="center">
+                        <IconButton onClick={() => handleRowDetailsClick(row)}>
+                          <InfoIcon />
+                        </IconButton>
+                        <IconButton>
+                          <EditIcon />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
+
+      <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={rowsData.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+
+      {/* Column Reordering Dialog */}
+      <Dialog
+        open={columnDialogOpen}
+        onClose={() => setColumnDialogOpen(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <Box sx={{display:"flex" , alignItems:"center" , justifyContent:"space-between"}}>
+        <DialogTitle>Reorder Columns</DialogTitle>
+        <DialogTitle>Hide/Display</DialogTitle>
+        </Box>
+      
+        <DialogContent>
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="columns">
+              {(provided) => (
+                <List {...provided.droppableProps} ref={provided.innerRef}>
+                  {columns.map((col, index) => (
+                    <Draggable key={col.id} draggableId={col.id} index={index}>
+                      {(provided) => (
+                        <ListItem
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                        >
+                          <ListItemIcon>
+                            <DragHandleIcon />
+                          </ListItemIcon>
+                          <ListItemText primary={col.label} />
+                          <Checkbox
+                            checked={col.visible}
+                            onChange={() =>
+                              setColumns((prev) =>
+                                prev.map((c) =>
+                                  c.id === col.id
+                                    ? { ...c, visible: !c.visible }
+                                    : c
+                                )
+                              )
+                            }
+                          />
+                        </ListItem>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </List>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setColumnDialogOpen(false)}>Close</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Row Details Dialog */}
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Row Details</DialogTitle>
+        <DialogContent>
+          {selectedRow &&
+            Object.entries(selectedRow).map(([key, value]) => (
+              <Box key={key} sx={{ mb: 1 }}>
+                <strong>{key}:</strong> {value}
+              </Box>
+            ))}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpen(false)}>Close</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Filter Dialog */}
+      <Dialog
+        open={filterOpen}
+        onClose={() => setFilterOpen(false)}
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogTitle>Filter Rows</DialogTitle>
+        <DialogContent>
+          <Tabs value={tabValue} onChange={(e, newValue) => setTabValue(newValue)}>
+            <Tab label="Quick Filter" />
+            <Tab label="Advanced Filter" />
+          </Tabs>
+          {tabValue === 0 && (
+            <TextField
+              fullWidth
+              label="Name"
+              name="name"
+              value={filter.name}
+              onChange={handleFilterChange}
+              sx={{ mt: 2 }}
+            />
+          )}
+          {tabValue === 1 && (
+            <Box sx={{ mt: 2 }}>
+              {['name', 'calories', 'fat', 'carbs', 'protein'].map((key) => (
+                <TextField
+                  key={key}
+                  fullWidth
+                  label={key.charAt(0).toUpperCase() + key.slice(1)}
+                  name={key}
+                  value={filter[key]}
+                  onChange={handleFilterChange}
+                  sx={{ mb: 2 }}
+                />
+              ))}
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={applyFilter}>Apply</Button>
+          <Button onClick={() => setFilterOpen(false)}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }

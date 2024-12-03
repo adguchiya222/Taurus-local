@@ -423,6 +423,9 @@ function AppProviderTheme(props) {
 
   return (
     // preview-start
+
+    
+
     <AppProvider
       navigation={NAVIGATION}
       router={router}
@@ -434,6 +437,7 @@ function AppProviderTheme(props) {
         logo:  <img src={opexpertLOGO} alt="OpExpert" />,
         title: '',
       }}
+      
 
     >
 
