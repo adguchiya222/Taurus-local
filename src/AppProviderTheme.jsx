@@ -86,6 +86,8 @@ import {
     NotificationsActive as TriggersIcon,
   } from '@mui/icons-material';
 import { padding } from '@mui/system';
+import CreateForm from './CreateForm';
+import DetailView from './DetailView';
   
 
 const NAVIGATION = [
@@ -448,8 +450,12 @@ function AppProviderTheme(props) {
       
 
 
-      <TableBase />
+      {/* <TableBase /> */}
 
+
+{/* <CreateForm/> */}
+
+<DetailView/>
 
      
  

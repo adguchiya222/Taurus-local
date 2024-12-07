@@ -24,11 +24,13 @@
     "@toolpad/core": "^0.10.0",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
+    "framer-motion": "^11.13.1",
     "react": "^18.3.1",
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.3.1",
     "react-grid-layout": "^1.5.0",
-    "react-resizable": "^3.0.5"
+    "react-resizable": "^3.0.5",
+    "react-router-dom": "^7.0.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
