@@ -24,29 +24,29 @@ import SearchIcon from '@mui/icons-material/Search';
 import SideTab from './SideTab';
 import { margin } from '@mui/system';
 
-const tablesData = [
-  [
-    { name: 'Server 1', ip: '192.168.0.1', status: 'Active' },
-    { name: 'Server 2', ip: '192.168.0.2', status: 'Inactive' },
-    { name: 'Server 3', ip: '192.168.0.3', status: 'Inactive' },
-    { name: 'Server 4', ip: '192.168.0.4', status: 'Active' },
-    { name: 'Server 5', ip: '192.168.0.5', status: 'Inactive' },
-  ],
-  [
-    { name: 'Server 2', ip: '192.168.0.2', status: 'Inactive' },
-    { name: 'Server 3', ip: '192.168.0.3', status: 'Inactive' },
-    { name: 'Server 4', ip: '192.168.0.4', status: 'Active' },
-    { name: 'Server 5', ip: '192.168.0.5', status: 'Inactive' },
-  ],
-  [
-    { name: 'Web Server 1', ip: '172.16.0.1', status: 'Active' },
-    { name: 'Web Server 2', ip: '172.16.0.2', status: 'Inactive' },
-      { name: 'Server 2', ip: '192.168.0.2', status: 'Inactive' },
-    { name: 'Server 3', ip: '192.168.0.3', status: 'Inactive' },
-    { name: 'Server 4', ip: '192.168.0.4', status: 'Active' },
-    { name: 'Server 5', ip: '192.168.0.5', status: 'Inactive' },
-  ],
-];
+// const tablesData = [
+//   [
+//     { name: 'Server 1', ip: '192.168.0.1', status: 'Active' },
+//     { name: 'Server 2', ip: '192.168.0.2', status: 'Inactive' },
+//     { name: 'Server 3', ip: '192.168.0.3', status: 'Inactive' },
+//     { name: 'Server 4', ip: '192.168.0.4', status: 'Active' },
+//     { name: 'Server 5', ip: '192.168.0.5', status: 'Inactive' },
+//   ],
+//   [
+//     { name: 'Server 2', ip: '192.168.0.2', status: 'Inactive' },
+//     { name: 'Server 3', ip: '192.168.0.3', status: 'Inactive' },
+//     { name: 'Server 4', ip: '192.168.0.4', status: 'Active' },
+//     { name: 'Server 5', ip: '192.168.0.5', status: 'Inactive' },
+//   ],
+//   [
+//     { name: 'Web Server 1', ip: '172.16.0.1', status: 'Active' },
+//     { name: 'Web Server 2', ip: '172.16.0.2', status: 'Inactive' },
+//       { name: 'Server 2', ip: '192.168.0.2', status: 'Inactive' },
+//     { name: 'Server 3', ip: '192.168.0.3', status: 'Inactive' },
+//     { name: 'Server 4', ip: '192.168.0.4', status: 'Active' },
+//     { name: 'Server 5', ip: '192.168.0.5', status: 'Inactive' },
+//   ],
+// ];
 
 const DetailView = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -80,6 +80,34 @@ const DetailView = () => {
       Opened: '2023-11-25',
       'Assigned To': 'User 1',
       'Acquisition Method': 'Purchase',
+    },
+    contacts: {
+      'Lease Contract': 'LC-001',
+      'Warranty Expiry': '2025-12-31',
+      Order: 'Order 1, Order 3',
+      Description:
+        'This is a sample description of the asset. It is intended for demonstration purposes only. The asset has been well maintained and is in excellent condition.',
+    },
+    contacts: {
+      'Lease Contract': 'LC-001',
+      'Warranty Expiry': '2025-12-31',
+      Order: 'Order 1, Order 3',
+      Description:
+        'This is a sample description of the asset. It is intended for demonstration purposes only. The asset has been well maintained and is in excellent condition.',
+    },
+    contacts: {
+      'Lease Contract': 'LC-001',
+      'Warranty Expiry': '2025-12-31',
+      Order: 'Order 1, Order 3',
+      Description:
+        'This is a sample description of the asset. It is intended for demonstration purposes only. The asset has been well maintained and is in excellent condition.',
+    },
+    contacts: {
+      'Lease Contract': 'LC-001',
+      'Warranty Expiry': '2025-12-31',
+      Order: 'Order 1, Order 3',
+      Description:
+        'This is a sample description of the asset. It is intended for demonstration purposes only. The asset has been well maintained and is in excellent condition.',
     },
     contacts: {
       'Lease Contract': 'LC-001',
@@ -354,7 +382,7 @@ const DetailView = () => {
         </Paper>
 
  
-        <Paper
+        {/* <Paper
   elevation={8}
   sx={{
     width: '100%',
@@ -372,7 +400,7 @@ const DetailView = () => {
     <SideTab tabsData={tablesData} />
   </Box>
 </Paper>
-
+ */}
 
 
 

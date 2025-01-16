@@ -88,6 +88,10 @@ import {
 import { padding } from '@mui/system';
 import CreateForm from './CreateForm';
 import DetailView from './DetailView';
+import TableSkeleton from './TableSkeleton';
+import DetailsViewSkeleton from './loader/DetailsViewSkeleton';
+import DefaultDashboard from './Dashboard/DefaultDashboard';
+import EmbededURL from './Dashboard/EmbededURL';
   
 
 const NAVIGATION = [
@@ -450,16 +454,21 @@ function AppProviderTheme(props) {
       
 
 
-      {/* <TableBase /> */}
+      <TableBase />
 
 
 {/* <CreateForm/> */}
 
-<DetailView/>
+{/* <DetailView/> */}
 
-     
- 
-        
+
+ {/* <DetailsViewSkeleton/> */}
+
+{/* <DefaultDashboard/> 
+
+<EmbededURL/> */}
+
+
       </PageContainer>
       </ToolpadDashboardLayout>
 
